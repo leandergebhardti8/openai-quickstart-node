@@ -6,12 +6,19 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 export default async function (req, res) {
-  const completion = await openai.createCompletion({
-    model: "text-davinci-002",
+  // const completion = await openai.createCompletion({
+  //   model: "text-davinci-002",
+  //   prompt: generatePrompt(req.body.animal),
+  //   temperature: 0.6,
+  // });
+  // res.status(200).json({ result: completion.data.choices[0].text });
+  const response = await openai.createImage({
     prompt: generatePrompt(req.body.animal),
-    temperature: 0.6,
+    n: 1,
+    size: "1024x1024",
   });
-  res.status(200).json({ result: completion.data.choices[0].text });
+  image_url = response.data.data[0].url;
+  res.status(200).json({ result: response.data.data[0].url });
 }
 
 function generatePrompt(animal) {
